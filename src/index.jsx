@@ -14,17 +14,16 @@ domready(function() {
     );
 
     router = new Router().init();
-    router.param("name", /([\w$_])/);
+    router.param("name", /([A-Za-z$_][A-Za-z$_0-9]*)/i);
     router.on('/', MainComponent.showHome);
-    router.on('/x/:name', MainComponent.showOne);
+    router.on('/x/:category/:name', MainComponent.showOne);
+    router.on('/x/:category', MainComponent.showAll);
     router.on('/all', MainComponent.showAll);
     router.on('/categories', MainComponent.showCategories);
 
     // dispatch the initial route
     api.load().then(function(){
-        console.log("r1")
         MainComponent.isReady(function(){
-            console.log("r2")
             router.dispatch("on" ,"/" + router.getRoute().join("/"));
         });
     });

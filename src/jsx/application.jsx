@@ -4,6 +4,7 @@ var Nav = require("./nav.jsx");
 var Home = require("./home.jsx");
 var Listing = require("./listing.jsx");
 var Item = require("./item.jsx");
+var Categories = require("./categories.jsx");
 var api = require('api');
 
 function getType(x){
@@ -21,7 +22,7 @@ var Application = React.createClass({
         console.log("showHome")
         this.setState({component: 'Home'});
     },
-    showOne: function(name){
+    showOne: function(category, name){
         var item = api.getItem(name);
         this.assert(item) && this.setState({
             component: "Item",
@@ -29,14 +30,22 @@ var Application = React.createClass({
         });
     },
     showCategories: function(name){
-        this.setState({component: 'Categories'});
+        this.setState({component: 'Categories', items: api.getCategories()});
     },
-    showAll: function(){
+    showAll: function(category){
         var items = api.getItems();
+
+        if (category) {
+            items = items.filter(function(x){
+                return x.category.toLowerCase() === category;
+            });
+        }
+
         this.assert(items) && this.setState({component: 'Listing', items: items});
     },
     assert: function(x){
         var type = getType(x);
+        console.log(type, x);   
         if (!x) {
             return this.show404();
         }
@@ -46,7 +55,6 @@ var Application = React.createClass({
         if (Object.keys(x).length === 0) {
             return this.show404();
         }
-
 
         return true;
     },
@@ -66,8 +74,11 @@ var Application = React.createClass({
             else if (self.state.component === "Item") {
                 return (<Item data={self.state.item} />)
             }
+            else if (self.state.component === "Categories") {
+                return (<Categories items={self.state.items} />)
+            }
             else {
-                return (<h1>Page could not be found.  Try one of the menu items above.</h1>);
+                return (<h1>Page could not be found.  Try one of the menu items above.</h1>)
             }
         };
 

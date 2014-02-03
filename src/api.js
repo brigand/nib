@@ -5,6 +5,7 @@
     var items = [];
     var itemsByName = {};
     var names = [];
+    var categories = [];
 
     function GET(url) {
         return new Promise(function(resolve, reject) {
@@ -30,8 +31,13 @@
             // load all items into the itemsByName object
             for ( var i = 0; i < _items.length; i++ ) {
                 var item = _items[i];
-                itemsByName[item.name] = item;
-                names.push(item.name);
+                itemsByName[item.name.toLowerCase()] = item;
+                names.push(item.name.toLowerCase());
+
+                // add category if we don't already have it
+                if (categories.indexOf(item.category) === -1){
+                    categories.push(item.category);
+                }
             }
 
             return _items;
@@ -48,13 +54,16 @@
             return names.filter(filter || id);
         },
         getItem: function(name){
-            return itemsByName[name];
+            return itemsByName[name.toLowerCase()];
         },
         getItems: function(){
             return items;
         },
         load: function(){
             return getItems;
+        },
+        getCategories: function(){
+            return categories;
         }
     };
 

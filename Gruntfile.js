@@ -142,7 +142,7 @@ module.exports = function (grunt) {
             options: {
               livereload: true,
             },
-            files: [ "src/**/*.jsx", "src/**/*.css", 'src/*.html', "src/**/*.js"],
+            files: [ "data/**/*.js", "src/**/*.jsx", "src/**/*.css", 'src/*.html', "src/**/*.js"],
             tasks: [ 'devBuild' ]
         },
 
