@@ -48,12 +48,12 @@ module.exports = function (grunt) {
             },
             dist: {
                 files: [
+                    {src: ['data/data.json'], dest:'./dist/bin/data.json'},
                     {src: ['bower_components/director/build/director.min.js'], dest: './dist/js/vendor/director.min.js'},
                     {src: ['bower_components/react/react.min.js'], dest: './dist/js/vendor/react.min.js'},
                     {src: ['bower_components/foundation/css/foundation.min.css'], dest: './dist/css/vendor/foundation.css'},
                     {src: ['bower_components/normalize-css/normalize.css'], dest: './dist/css/vendor/normalize.css'},
-                    {src: ['src/css/nib.css'], dest: './dist/css/nib.css'},
-                    {src: ['data/data.json'], dest: './dist/bin/data.json'}
+                    {src: ['src/css/nib.css'], dest: './dist/css/nib.css'}
                 ]
             }
         },
@@ -169,6 +169,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('dist', [
     'clean:dist',
+    'build-nibbles-json',
     'copy:dist',
     'replace:dist',
     'browserify:dist',
