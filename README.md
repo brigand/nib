@@ -10,7 +10,7 @@ Hey!  There are a ton of little snippets of JavaScript that are used all of the 
 Nib attempts to get off of these snippets into one place.
 
  - organization and consolidation of functions
- - *eventually* make collections of functions that can be downloaded into a single file
+ - make collections of functions that can be downloaded into a single file
  - *eventually* a command line tool that reads an array of nibs from package.json
  
 Nib's open source, and everything in MIT licensed.

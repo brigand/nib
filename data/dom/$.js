@@ -1,8 +1,9 @@
 // Simple replacement for jQuery-like selectors in IE8+
 // String[, HTMLElement] -> Array<HTMLElement>
 function $(sel, parent) {
-    "use strict";
-    return Array.prototype.slice.call((parent || document).querySelectorAll(sel));
+    var nodeList = (parent || document).querySelectorAll(sel),
+        slice = Array.prototype.slice;
+    return slice.call(nodeList);
 }
 
 // Get the text from all <p> tags on a page
@@ -16,3 +17,4 @@ var numberLinks = function(container){
         el.textContent += " (" + (index + 1) + ")";
     });
 };
+
