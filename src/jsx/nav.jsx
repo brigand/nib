@@ -21,7 +21,7 @@ var Nav = React.createClass({
         var createLink = function(page){
             return (
                 <li>
-                    <a href={'/#/' + page.route}>{page.name}</a>
+                    <a href={'#/' + page.route}>{page.name}</a>
                 </li>
                 );
         };
