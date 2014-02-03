@@ -5621,7 +5621,8 @@ module.exports = {
 
 		return before + body + after;
 	}
-}
+};
+
 },{"api":"Fu5ZXU"}],49:[function(require,module,exports){
 /** @jsx React.DOM */
 
@@ -5770,7 +5771,7 @@ var Listing = React.createClass({displayName: 'Listing',
                  + (x.examples.indexOf(s) !== -1) * 1;
         }
 
-        return score(a) - score(b);
+        return score(b) - score(a);
     },
     filterChanged: function(event) {
         this.setState({filterText: event.target.value});
