@@ -21,7 +21,7 @@ var Listing = React.createClass({
                  + (x.examples.indexOf(s) !== -1) * 1;
         }
 
-        return score(a) - score(b);
+        return score(b) - score(a);
     },
     filterChanged: function(event) {
         this.setState({filterText: event.target.value});
