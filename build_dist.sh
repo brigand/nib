@@ -28,6 +28,9 @@ git checkout gh-pages
 # Clear out the old files
 rm ./* -rf
 
+# Bring back CNAME
+git checkout CNAME
+
 # Bring back the dist files
 mv $TEMP_DIR/dist/* ./
 
