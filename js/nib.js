@@ -5508,7 +5508,7 @@ var Listing = React.createClass({displayName: 'Listing',
     render: function() {
         var makeItem = function(item) {
             return (
-                React.DOM.a( {className:"panel", href:'/#/x/' + item.name}, 
+                React.DOM.a( {className:"panel", href:'#/x/' + item.name}, 
                     React.DOM.h3( {className:"f-mono"}, 
                         React.DOM.span( {className:"c-pink"}, item.name), " - " ,
                         React.DOM.span( {className:"smaller"}, item.types)),
@@ -5552,7 +5552,7 @@ var Nav = React.createClass({displayName: 'Nav',
         var createLink = function(page){
             return (
                 React.DOM.li(null, 
-                    React.DOM.a( {href:'/#/' + page.route}, page.name)
+                    React.DOM.a( {href:'#/' + page.route}, page.name)
                 )
                 );
         };
