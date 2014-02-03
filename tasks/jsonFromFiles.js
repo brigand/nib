@@ -105,7 +105,7 @@ module.exports = function () {
         });
 
     processed.then(function (json) {
-            fs.writeFileAsync("data/data.json", JSON.stringify(json));
+            return fs.writeFileAsync("data/data.json", JSON.stringify(json));
         }).then(function(){
             done();
         }).catch(function(x){
