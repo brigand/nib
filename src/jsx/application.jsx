@@ -5,6 +5,7 @@ var Home = require("./home.jsx");
 var Listing = require("./listing.jsx");
 var Item = require("./item.jsx");
 var Categories = require("./categories.jsx");
+var Bundle = require("./bundle/bundle.jsx");
 var api = require('api');
 
 function getType(x){
@@ -20,13 +21,14 @@ var Application = React.createClass({
     },
     showHome: function(name){
         console.log("showHome")
-        this.setState({component: 'Home'});
+        this.setState({component: 'Home', item: null, items: null});
     },
     showOne: function(category, name){
         var item = api.getItem(name);
         this.assert(item) && this.setState({
             component: "Item",
-            item: item
+            item: item,
+            items: null
         });
     },
     showCategories: function(name){
@@ -41,7 +43,11 @@ var Application = React.createClass({
             });
         }
 
-        this.assert(items) && this.setState({component: 'Listing', items: items});
+        this.assert(items) && this.setState({
+            component: 'Listing', 
+            items: items,
+            item: null
+        });
     },
     assert: function(x){
         var type = getType(x);
@@ -60,6 +66,9 @@ var Application = React.createClass({
     },
     show404: function(){
         this.setState({component: '404'});
+    },
+    addToBundle: function(){
+
     },
     render: function() {
         var self = this;
@@ -86,11 +95,17 @@ var Application = React.createClass({
             <div>
                 <h2>JS Nibbles</h2>
                 <Nav />
-                {this.state.ready ? getCurrentComponent() : <h3>Loading...</h3>}
+                <div className="row">
+                    <div className="small-9 columns">
+                        {this.state.ready ? getCurrentComponent() : <h3>Loading...</h3>}
+                    </div>
+                    <div className="small-3 columns">
+                        <Bundle item={self.state.component === "Item" ? this.state.item : null} />
+                    </div>
+                </div>
             </div>
         );
     }
 });
 
 module.exports = Application;
-
