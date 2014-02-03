@@ -10,7 +10,7 @@ grunt dist
 # Move the dist somewhere safe
 TEMP_DIR=`sh tasks/get_temp_dir.sh`
 
-mkdir $TEMP_DIR || false
+mkdir $TEMP_DIR || true
 mv dist/ $TEMP_DIR/
 
 # Save our node_modules and bower_components directories
