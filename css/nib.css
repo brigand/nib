@@ -1,3 +1,4 @@
+/* Basic colors */
 .c-blue {
 	color: #001281;
 }
@@ -17,6 +18,33 @@
 .smaller {
 	font-size: 0.5em;
 	vertical-align: middle;
+}
+
+/* Special elements */
+.nib-bundle {
+	box-shadow: 1px 1px 8px #aaa;
+	height: 100%;
+	min-height: 30em;
+	box-sizing: border-box;
+	margin-top: 1em;
+	background-color: #FCFCDF;
+}
+
+.nib-bundle li {
+	list-style: none;
+}
+
+.nib-bundle li * {
+	vertical-align: middle;
+}
+
+.nib-bundle li h4 {
+	overflow: hidden;
+}
+
+.nib-bundle > h3 {
+	padding: 1em 0;
+	text-align: center;
 }
 
 /* Colors for the code highlighting */

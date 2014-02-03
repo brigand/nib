@@ -5133,6 +5133,7 @@ module.exports=require('Fu5ZXU');
     var items = [];
     var itemsByName = {};
     var names = [];
+    var categories = [];
 
     function GET(url) {
         return new Promise(function(resolve, reject) {
@@ -5158,8 +5159,13 @@ module.exports=require('Fu5ZXU');
             // load all items into the itemsByName object
             for ( var i = 0; i < _items.length; i++ ) {
                 var item = _items[i];
-                itemsByName[item.name] = item;
-                names.push(item.name);
+                itemsByName[item.name.toLowerCase()] = item;
+                names.push(item.name.toLowerCase());
+
+                // add category if we don't already have it
+                if (categories.indexOf(item.category) === -1){
+                    categories.push(item.category);
+                }
             }
 
             return _items;
@@ -5176,13 +5182,16 @@ module.exports=require('Fu5ZXU');
             return names.filter(filter || id);
         },
         getItem: function(name){
-            return itemsByName[name];
+            return itemsByName[name.toLowerCase()];
         },
         getItems: function(){
             return items;
         },
         load: function(){
             return getItems;
+        },
+        getCategories: function(){
+            return categories;
         }
     };
 
@@ -5346,17 +5355,16 @@ domready(function() {
     );
 
     router = new Router().init();
-    router.param("name", /([\w$_])/);
+    router.param("name", /([A-Za-z$_][A-Za-z$_0-9]*)/i);
     router.on('/', MainComponent.showHome);
-    router.on('/x/:name', MainComponent.showOne);
+    router.on('/x/:category/:name', MainComponent.showOne);
+    router.on('/x/:category', MainComponent.showAll);
     router.on('/all', MainComponent.showAll);
     router.on('/categories', MainComponent.showCategories);
 
     // dispatch the initial route
     api.load().then(function(){
-        console.log("r1")
         MainComponent.isReady(function(){
-            console.log("r2")
             router.dispatch("on" ,"/" + router.getRoute().join("/"));
         });
     });
@@ -5369,6 +5377,8 @@ var Nav = require("./nav.jsx");
 var Home = require("./home.jsx");
 var Listing = require("./listing.jsx");
 var Item = require("./item.jsx");
+var Categories = require("./categories.jsx");
+var Bundle = require("./bundle/bundle.jsx");
 var api = require('api');
 
 function getType(x){
@@ -5384,24 +5394,37 @@ var Application = React.createClass({displayName: 'Application',
     },
     showHome: function(name){
         console.log("showHome")
-        this.setState({component: 'Home'});
+        this.setState({component: 'Home', item: null, items: null});
     },
-    showOne: function(name){
+    showOne: function(category, name){
         var item = api.getItem(name);
         this.assert(item) && this.setState({
             component: "Item",
-            item: item
+            item: item,
+            items: null
         });
     },
     showCategories: function(name){
-        this.setState({component: 'Categories'});
+        this.setState({component: 'Categories', items: api.getCategories()});
     },
-    showAll: function(){
+    showAll: function(category){
         var items = api.getItems();
-        this.assert(items) && this.setState({component: 'Listing', items: items});
+
+        if (category) {
+            items = items.filter(function(x){
+                return x.category.toLowerCase() === category;
+            });
+        }
+
+        this.assert(items) && this.setState({
+            component: 'Listing', 
+            items: items,
+            item: null
+        });
     },
     assert: function(x){
         var type = getType(x);
+        console.log(type, x);   
         if (!x) {
             return this.show404();
         }
@@ -5412,11 +5435,13 @@ var Application = React.createClass({displayName: 'Application',
             return this.show404();
         }
 
-
         return true;
     },
     show404: function(){
         this.setState({component: '404'});
+    },
+    addToBundle: function(){
+
     },
     render: function() {
         var self = this;
@@ -5431,8 +5456,11 @@ var Application = React.createClass({displayName: 'Application',
             else if (self.state.component === "Item") {
                 return (Item( {data:self.state.item} ))
             }
+            else if (self.state.component === "Categories") {
+                return (Categories( {items:self.state.items} ))
+            }
             else {
-                return (React.DOM.h1(null, "Page could not be found.  Try one of the menu items above."));
+                return (React.DOM.h1(null, "Page could not be found.  Try one of the menu items above."))
             }
         };
 
@@ -5440,7 +5468,14 @@ var Application = React.createClass({displayName: 'Application',
             React.DOM.div(null, 
                 React.DOM.h2(null, "JS Nibbles"),
                 Nav(null ),
-                this.state.ready ? getCurrentComponent() : React.DOM.h3(null, "Loading...")
+                React.DOM.div( {className:"row"}, 
+                    React.DOM.div( {className:"small-9 columns"}, 
+                        this.state.ready ? getCurrentComponent() : React.DOM.h3(null, "Loading...")
+                    ),
+                    React.DOM.div( {className:"small-3 columns"}, 
+                        Bundle( {item:self.state.component === "Item" ? this.state.item : null} )
+                    )
+                )
             )
         );
     }
@@ -5448,8 +5483,188 @@ var Application = React.createClass({displayName: 'Application',
 
 module.exports = Application;
 
+},{"./bundle/bundle.jsx":47,"./categories.jsx":49,"./home.jsx":50,"./item.jsx":51,"./listing.jsx":52,"./nav.jsx":53,"api":"Fu5ZXU"}],47:[function(require,module,exports){
+/** @jsx React.DOM */
 
-},{"./home.jsx":47,"./item.jsx":48,"./listing.jsx":49,"./nav.jsx":50,"api":"Fu5ZXU"}],47:[function(require,module,exports){
+var bundleStore = require("./bundleStore");
+
+var Bundle = React.createClass({displayName: 'Bundle',
+    getInitialState: function() {
+        return {items: bundleStore.get()};
+    },
+    toggleItem: function(item){
+    	var items = this.state.items;
+    	var duplicate = items.reduce(function(last, it){
+    		if (it.name === item.name) {
+    			return it;
+    		}
+    		return last;
+    	}, false);
+
+    	if (duplicate === false) {
+    		items.push(item);
+    	}
+    	else {
+    		var index = items.indexOf(duplicate);
+    		items.splice(index, 1);
+    	}
+
+    	bundleStore.set(items);
+
+        this.clearPreviousURL();
+    	this.setState({items: items});
+    },
+    toggleCurrentItem: function(){
+        this.toggleItem(this.props.item);
+    },
+    download: function(){
+        var js = bundleStore.getJS(this.state.items);
+
+        // unsafe nasty stuff
+        var blob = new Blob([js], {
+            type: "application/javascript" 
+        });
+
+        var a = document.createElement("a");
+        a.download = "nib.js";
+        
+        var createURL = URL.createObjectURL || URL.webkitCreateObjectURL;
+
+        var url = createURL(blob);
+        a.href = url;
+        a.click();
+
+        this.setState({_objectURL: url});
+    },
+    clearPreviousURL: function(){
+        var revokeURL = URL.revokeObjectURL || URL.webkitRevokeObjectURL;
+        var url = this.state._objectURL;
+        if (url) {
+            revokeURL(url);
+            this.setState({_objectURL: null});
+        }
+    },
+    render: function() {
+        var bundle = this, items = this.state.items;
+
+    	var makeItem = function(item){
+    		return (React.DOM.li( {className:"row"}, 
+        			React.DOM.div( {className:"small-9 column f-mono"}, 
+                        React.DOM.h4(null, item.name,":",item.category)
+                    ),
+                    React.DOM.div( {className:"small-3 column f-mono"}, 
+        			     React.DOM.h2( {className:"f-mono", onClick:bundle.toggleItem.bind(bundle, item)}, "×")
+                    )
+    			))
+    	}
+
+        return (
+            React.DOM.div(null, 
+                React.DOM.div( {className:"nib-bundle"}, 
+                	React.DOM.h3(null, "Bundle"),
+                	React.DOM.ul(null, 
+                		this.state.items.map(makeItem)
+                	)
+                    
+                ),
+                this.props.item && (React.DOM.button( {onClick:this.toggleCurrentItem}, "Add/Remove Current Item")),
+                items && items.length && (React.DOM.button( {onClick:this.download}, "Download JS"))
+            )
+        );
+    }
+});
+
+
+
+module.exports = Bundle;
+
+
+},{"./bundleStore":48}],48:[function(require,module,exports){
+var key = "nib_bundleStore_1";
+var api = require("api");
+
+module.exports = {
+	get: function(){
+		var current = localStorage[key];
+		
+		try {
+			return JSON.parse(current) || [];
+		}
+		catch (e) {
+			return [];
+		}
+	},
+	set: function(items){
+		localStorage[key] = JSON.stringify(items.map(function(it){
+			return {name: it.name, category: it.category};
+		}));
+	},
+	// take an array of items, make a bundle from them
+	getJS: function(items){
+		// get all of the details
+		items = items.map(function(it){
+			return api.getItem(it.name);
+		});
+
+		var before = "/** Built on http://nib.ijk.io - license is MIT */\n"
+			+ "var nib = (function(){\n"
+			+ "var exports = nib || {};\n";
+		var after = "\n"
+			+ "return exports;"
+			+ "\n})();\n\n"
+			+ "typeof module === 'object' && (module.exports = nib);";
+
+		var body = items.map(function(item){
+			return item.function.trim() + "\n"
+				+ "exports." + item.name + " = " + item.name + ";"
+		}).join("\n\n");
+
+		return before + body + after;
+	}
+}
+},{"api":"Fu5ZXU"}],49:[function(require,module,exports){
+/** @jsx React.DOM */
+
+var Categories = React.createClass({displayName: 'Categories',
+    getInitialState: function() {
+        return {};
+    },
+    render: function() {
+        var cats = this.props.items, groups = [], buf = [];
+
+        for (var i=0; i<cats.length; i++) {
+            if (i % 3 === 0) {
+                buf = [];
+                groups.push(buf);
+            }
+
+            buf[i % 3] = cats[i];
+        };
+
+        var makeRow = function(row){
+            return (React.DOM.div( {className:"row"}, row.map(makeCategory)));
+        };
+
+        var makeCategory = function(category){
+            return (
+                React.DOM.h2( {className:"small-6 large-4 columns"}, 
+                    React.DOM.a( {href:'#/x/' + category, className:""}, category)
+                )
+            );
+        };
+
+        return (
+            React.DOM.div(null, 
+                groups.map(makeRow)
+            )
+        );
+    }
+});
+
+module.exports = Categories;
+
+
+},{}],50:[function(require,module,exports){
 /** @jsx React.DOM */
 
 var Home = React.createClass({displayName: 'Home',
@@ -5457,9 +5672,38 @@ var Home = React.createClass({displayName: 'Home',
         return {};
     },
     render: function() {
+        var link = function(name){
+            var urls = {
+                All: "#/all",
+                Categories: "#/categories",
+                "GitHub repo": "http://github.com/brigand/nib"
+            };
+
+            return (React.DOM.a( {href:urls[name]}, name));
+        };
+
         return (
             React.DOM.div(null, 
-                React.DOM.h3(null, "Welcome!")
+                React.DOM.h2(null, "How to use this site"),
+                React.DOM.ul(null, 
+                    React.DOM.li(null, "Click ", link("All"), " or ", link("Categories"), " to find some snippets"),
+                    React.DOM.li(null, "Add them to your Bundle (on the right)"),
+                    React.DOM.li(null, "Click the download button, and either ", React.DOM.span( {className:"f-mono"}, "require"), " the module, "+
+                    "or include it with a ", React.DOM.span( {className:"f-mono"}, "<script>"), " tag")
+                ),
+
+                React.DOM.hr(null ),
+
+                React.DOM.h2(null, "Contribute"),
+                React.DOM.div(null, "Go to the ", link("GitHub repo"), " if you want to help out. "+  
+                "Everything is explained in the README.  New code, bug reports, etc. are all helpful!"),
+
+                React.DOM.hr(null ),
+
+                React.DOM.h2(null, "Legal"),
+
+                React.DOM.div(null, "All code is MIT licensed, so you can use it for any purpose, including commercial. "+
+                "If you keep the comment at the top of the downloaded file intact, you are all set!")
             )
         );
     }
@@ -5468,7 +5712,7 @@ var Home = React.createClass({displayName: 'Home',
 module.exports = Home;
 
 
-},{}],48:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 /** @jsx React.DOM */
 var JavaScriptPre = require("../common/javascript.jsx");
 
@@ -5502,13 +5746,39 @@ var Item = React.createClass({displayName: 'Item',
 module.exports = Item;
 
 
-},{"../common/javascript.jsx":44}],49:[function(require,module,exports){
+},{"../common/javascript.jsx":44}],52:[function(require,module,exports){
 /** @jsx React.DOM */
 var Listing = React.createClass({displayName: 'Listing',
+    getInitialState: function() {
+        return {filterText: ""};
+    },
+    filter: function(x){
+        var s = this.state.filterText;
+
+        return (x.name.toLowerCase().indexOf(s) !== -1)
+             || (x.description.indexOf(s) !== -1)
+             || (x.function.indexOf(s) !== -1)
+             || (x.examples.indexOf(s) !== -1);
+    },
+    sort: function(a, b){
+        var s = this.state.filterText;
+
+        var score = function(x){
+            return (x.name.toLowerCase().indexOf(s) !== -1) * 100
+                 + (x.description.indexOf(s) !== -1) * 10
+                 + (x.function.indexOf(s) !== -1) * 2
+                 + (x.examples.indexOf(s) !== -1) * 1;
+        }
+
+        return score(a) - score(b);
+    },
+    filterChanged: function(event) {
+        this.setState({filterText: event.target.value});
+    },
     render: function() {
         var makeItem = function(item) {
             return (
-                React.DOM.a( {className:"panel", href:'#/x/' + item.name}, 
+                React.DOM.a( {className:"panel", href:'#/x/' + item.category + '/' + item.name.toLowerCase()}, 
                     React.DOM.h3( {className:"f-mono"}, 
                         React.DOM.span( {className:"c-pink"}, item.name), " - " ,
                         React.DOM.span( {className:"smaller"}, item.types)),
@@ -5517,9 +5787,13 @@ var Listing = React.createClass({displayName: 'Listing',
             )
         };
 
+        function id(x){ return x; }
+
         return (
             React.DOM.div(null, 
-                this.props.items.map(makeItem)
+                React.DOM.input( {value:this.state.filterText,  onChange:this.filterChanged,
+                    type:"text", placeholder:"filter", autoFocus:true} ),
+                this.props.items.filter(this.filter).map(id).sort(this.sort).map(makeItem)
             )
         );
     }
@@ -5528,7 +5802,7 @@ var Listing = React.createClass({displayName: 'Listing',
 module.exports = Listing;
 
 
-},{}],50:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 /** @jsx React.DOM */
 var Nav = React.createClass({displayName: 'Nav',
     getInitialState: function() {
