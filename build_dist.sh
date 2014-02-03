@@ -11,6 +11,7 @@ grunt dist
 TEMP_DIR=`sh tasks/get_temp_dir.sh`
 
 mkdir $TEMP_DIR || true
+rm $TEMP_DIR/* -rf
 mv dist/ $TEMP_DIR/
 
 # Save our node_modules and bower_components directories
