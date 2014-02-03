@@ -22,8 +22,13 @@ mv bower_components $TEMP_DIR/
 # Clean the working directory
 git checkout .
 
-# Bring back the dist files
+
 git checkout gh-pages
+
+# Clear out the old files
+rm ./* -rf
+
+# Bring back the dist files
 mv $TEMP_DIR/dist/* ./
 
 # Display the changes, and then let the user commit, etc.
