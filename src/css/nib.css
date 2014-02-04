@@ -122,6 +122,10 @@ a.panel {
 		margin: auto;
 	}
 
+	.top-bar ul > li { 
+		width: auto;
+	}
+
 
 	#application > div > h2 {
 		display: block;
