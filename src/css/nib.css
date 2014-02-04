@@ -91,6 +91,11 @@
 	white-space: pre-wrap;
 }
 
+.fluid {
+	display: block;
+	width: 100%;
+}
+
 a.panel {
 	display: block;
 }

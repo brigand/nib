@@ -6,6 +6,9 @@ var Bundle = React.createClass({
     getInitialState: function() {
         return {items: bundleStore.get()};
     },
+    componentDidMount: function(){
+        this.change();
+    },
     toggleItem: function(item){
     	var items = this.state.items;
     	var duplicate = items.reduce(function(last, it){
@@ -25,38 +28,16 @@ var Bundle = React.createClass({
 
     	bundleStore.set(items);
 
-        this.clearPreviousURL();
-    	this.setState({items: items});
+    	this.setState({items: items}, this.change);
+    },
+    change: function(){
+        this.props.onChange && this.props.onChange(this.state.items);
     },
     toggleCurrentItem: function(){
         this.toggleItem(this.props.item);
     },
     download: function(){
-        var js = bundleStore.getJS(this.state.items);
-
-        // unsafe nasty stuff
-        var blob = new Blob([js], {
-            type: "application/javascript" 
-        });
-
-        var a = document.createElement("a");
-        a.download = "nib.js";
-        
-        var createURL = URL.createObjectURL || URL.webkitCreateObjectURL;
-
-        var url = createURL(blob);
-        a.href = url;
-        a.click();
-
-        this.setState({_objectURL: url});
-    },
-    clearPreviousURL: function(){
-        var revokeURL = URL.revokeObjectURL || URL.webkitRevokeObjectURL;
-        var url = this.state._objectURL;
-        if (url) {
-            revokeURL(url);
-            this.setState({_objectURL: null});
-        }
+        window.location = "#/download";
     },
     render: function() {
         var bundle = this, items = this.state.items;
@@ -81,7 +62,7 @@ var Bundle = React.createClass({
                 	</ul>
                     
                 </div>
-                {this.props.item && (<button onClick={this.toggleCurrentItem}>Add/Remove Current Item</button>)}
+                {this.props.item && (<button onClick={this.toggleCurrentItem}>Add Current Item</button>)}
                 {items && items.length && (<button onClick={this.download}>Download JS</button>)}
             </div>
         );

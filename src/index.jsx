@@ -20,6 +20,7 @@ domready(function() {
     router.on('/x/:category', MainComponent.showAll);
     router.on('/all', MainComponent.showAll);
     router.on('/categories', MainComponent.showCategories);
+    router.on('/download', MainComponent.showDownload);
 
     // dispatch the initial route
     api.load().then(function(){
