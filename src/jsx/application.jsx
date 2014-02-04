@@ -6,7 +6,9 @@ var Listing = require("./listing.jsx");
 var Item = require("./item.jsx");
 var Categories = require("./categories.jsx");
 var Bundle = require("./bundle/bundle.jsx");
+var Download = require("./download.jsx");
 var api = require('api');
+var bundleStore = require("./bundle/bundleStore");
 
 function getType(x){
     return Object.prototype.toString.call(x).slice(8, -1);
@@ -49,6 +51,9 @@ var Application = React.createClass({
             item: null
         });
     },
+    showDownload: function(){
+        this.setState({component: "Download"});
+    },
     assert: function(x){
         var type = getType(x);
         console.log(type, x);   
@@ -67,9 +72,6 @@ var Application = React.createClass({
     show404: function(){
         this.setState({component: '404'});
     },
-    addToBundle: function(){
-
-    },
     render: function() {
         var self = this;
         var getCurrentComponent = function(){
@@ -86,22 +88,33 @@ var Application = React.createClass({
             else if (self.state.component === "Categories") {
                 return (<Categories items={self.state.items} />)
             }
+            else if (self.state.component === "Download") {
+                return (<Download items={this.refs.bundle.state.items} />)
+            }
             else {
                 return (<h1>Page could not be found.  Try one of the menu items above.</h1>)
             }
         };
+
+        var download = function(){
+            return (<Download />);
+        }
+
+        var body = function(){
+            return [<div className="small-9 columns">
+                {this.state.ready ? getCurrentComponent() : <h3>Loading...</h3>}
+            </div>,
+            <div className="small-3 columns">
+                <Bundle item={self.state.component === "Item" ? this.state.item : null} />
+            </div>]
+        }.bind(this);
 
         return (
             <div>
                 <h2>JS Nibbles</h2>
                 <Nav />
                 <div className="row">
-                    <div className="small-9 columns">
-                        {this.state.ready ? getCurrentComponent() : <h3>Loading...</h3>}
-                    </div>
-                    <div className="small-3 columns">
-                        <Bundle item={self.state.component === "Item" ? this.state.item : null} />
-                    </div>
+                    {this.state.component === "Download" ? download() : body()}
                 </div>
             </div>
         );
