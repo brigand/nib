@@ -3,8 +3,9 @@
 var bundleStore = require("./bundle/bundleStore");
 var Bundle = require("./bundle/bundle.jsx");
 var JavaScriptPre = require("../common/javascript.jsx");
+var DownloadLink = require("../common/download-link.jsx");
 
-var Home = React.createClass({
+var Download = React.createClass({
     getInitialState: function() {
         return {code: ""};
     },
@@ -43,9 +44,9 @@ var Home = React.createClass({
 
             <div>
                 <div className="small-9 columns">
-                    <a href={this.getHref(this.state.code)} 
+                    <DownloadLink href={this.getHref(this.state.code)} 
                         className="fluid button"
-                        download="nib.js">Save Bundle to File</a>
+                        download="nib.js">Save Bundle to File</DownloadLink>
                     <JavaScriptPre code={this.state.code} className="js-pre" />
                 </div>
                 <div className="small-3 columns">
@@ -56,5 +57,5 @@ var Home = React.createClass({
     }
 });
 
-module.exports = Home;
+module.exports = Download;
 

@@ -22,7 +22,6 @@ var Application = React.createClass({
         this.setState({ready: true}, callback);
     },
     showHome: function(name){
-        console.log("showHome")
         this.setState({component: 'Home', item: null, items: null});
     },
     showOne: function(category, name){
