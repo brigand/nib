@@ -32,7 +32,7 @@ rm ./* -rf
 git checkout CNAME
 
 # Bring back the dist files
-mv $TEMP_DIR/dist/* ./
+mv -f $TEMP_DIR/dist/* ./
 
 # Display the changes, and then let the user commit, etc.
 git status
