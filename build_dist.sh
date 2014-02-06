@@ -10,7 +10,7 @@ grunt dist
 # Move the dist somewhere safe
 TEMP_DIR=`sh tasks/get_temp_dir.sh`
 
-rm $TEMP_DIR -rf || true
+rm -rf $TEMP_DIR || true
 mkdir $TEMP_DIR
 
 mv dist/ $TEMP_DIR/
@@ -26,7 +26,7 @@ git checkout .
 git checkout gh-pages
 
 # Clear out the old files
-rm ./* -rf
+rm -rf ./* 
 
 # Bring back CNAME
 git checkout CNAME
