@@ -1333,8 +1333,8 @@ module.exports = (function(){
         return window;
     }
 })();
-}).call(this,require("/home/fb/web/jsnibbles/node_modules/grunt-browserify/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"/home/fb/web/jsnibbles/node_modules/grunt-browserify/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":41}],17:[function(require,module,exports){
+}).call(this,require("/Users/fb/web/nib/node_modules/grunt-browserify/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"/Users/fb/web/nib/node_modules/grunt-browserify/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":41}],17:[function(require,module,exports){
 /**
  * Copyright (c) 2013 Petka Antonov
  * 
@@ -2797,8 +2797,8 @@ Promise.prototype = Promise.prototype;
 return Promise;
 
 };
-}).call(this,require("/home/fb/web/jsnibbles/node_modules/grunt-browserify/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
-},{"./any.js":1,"./assert.js":2,"./async.js":3,"./call_get.js":5,"./cancel.js":6,"./captured_trace.js":7,"./catch_filter.js":8,"./direct_resolve.js":9,"./errors.js":10,"./errors_api_rejection":11,"./filter.js":13,"./finally.js":14,"./generators.js":15,"./global.js":16,"./map.js":17,"./nodeify.js":18,"./progress.js":19,"./promise_array.js":21,"./promise_resolver.js":23,"./promisify.js":25,"./props.js":27,"./race.js":29,"./reduce.js":30,"./settle.js":32,"./some.js":34,"./synchronous_inspection.js":36,"./thenables.js":37,"./timers.js":38,"./util.js":39,"/home/fb/web/jsnibbles/node_modules/grunt-browserify/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":41}],21:[function(require,module,exports){
+}).call(this,require("/Users/fb/web/nib/node_modules/grunt-browserify/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
+},{"./any.js":1,"./assert.js":2,"./async.js":3,"./call_get.js":5,"./cancel.js":6,"./captured_trace.js":7,"./catch_filter.js":8,"./direct_resolve.js":9,"./errors.js":10,"./errors_api_rejection":11,"./filter.js":13,"./finally.js":14,"./generators.js":15,"./global.js":16,"./map.js":17,"./nodeify.js":18,"./progress.js":19,"./promise_array.js":21,"./promise_resolver.js":23,"./promisify.js":25,"./props.js":27,"./race.js":29,"./reduce.js":30,"./settle.js":32,"./some.js":34,"./synchronous_inspection.js":36,"./thenables.js":37,"./timers.js":38,"./util.js":39,"/Users/fb/web/nib/node_modules/grunt-browserify/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":41}],21:[function(require,module,exports){
 /**
  * Copyright (c) 2013 Petka Antonov
  * 
@@ -4244,8 +4244,8 @@ else {
 }
 
 module.exports = schedule;
-}).call(this,require("/home/fb/web/jsnibbles/node_modules/grunt-browserify/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
-},{"./assert.js":2,"./global.js":16,"/home/fb/web/jsnibbles/node_modules/grunt-browserify/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":41}],32:[function(require,module,exports){
+}).call(this,require("/Users/fb/web/nib/node_modules/grunt-browserify/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"))
+},{"./assert.js":2,"./global.js":16,"/Users/fb/web/nib/node_modules/grunt-browserify/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":41}],32:[function(require,module,exports){
 /**
  * Copyright (c) 2013 Petka Antonov
  * 
@@ -5124,8 +5124,8 @@ process.chdir = function (dir) {
 };
 
 },{}],"api":[function(require,module,exports){
-module.exports=require('Fu5ZXU');
-},{}],"Fu5ZXU":[function(require,module,exports){
+module.exports=require('zLP7L+');
+},{}],"zLP7L+":[function(require,module,exports){
 (function (){
     "use strict";
 
@@ -5202,6 +5202,27 @@ module.exports=require('Fu5ZXU');
     }
 })();
 },{"bluebird":4}],44:[function(require,module,exports){
+/** @jsx React.DOM */
+var DownloadLink = React.createClass({displayName: 'DownloadLink',
+    componentDidMount: function(el){
+        if (this.props.download) {
+            el.download = this.props.download;
+        }
+    },
+    componentDidUpdate: function(_1, _2, el){
+        el.download = this.props.download;
+    },
+    render: function() {
+        return this.transferPropsTo(
+            React.DOM.a(null, this.props.children)
+        );
+    }
+});
+
+module.exports = DownloadLink;
+
+
+},{}],45:[function(require,module,exports){
 /** @jsx React.DOM */
 
 // JavaScript syntax highlighter
@@ -5338,7 +5359,7 @@ function miniLex(code){
 };
 
 module.exports = JavaScript;
-},{}],45:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 /** @jsx React.DOM */
 
 var domready = require('domready');
@@ -5361,6 +5382,7 @@ domready(function() {
     router.on('/x/:category', MainComponent.showAll);
     router.on('/all', MainComponent.showAll);
     router.on('/categories', MainComponent.showCategories);
+    router.on('/download', MainComponent.showDownload);
 
     // dispatch the initial route
     api.load().then(function(){
@@ -5370,7 +5392,7 @@ domready(function() {
     });
 });
 
-},{"./jsx/application.jsx":46,"api":"Fu5ZXU","domready":40}],46:[function(require,module,exports){
+},{"./jsx/application.jsx":47,"api":"zLP7L+","domready":40}],47:[function(require,module,exports){
 /** @jsx React.DOM */
 
 var Nav = require("./nav.jsx");
@@ -5379,7 +5401,9 @@ var Listing = require("./listing.jsx");
 var Item = require("./item.jsx");
 var Categories = require("./categories.jsx");
 var Bundle = require("./bundle/bundle.jsx");
+var Download = require("./download.jsx");
 var api = require('api');
+var bundleStore = require("./bundle/bundleStore");
 
 function getType(x){
     return Object.prototype.toString.call(x).slice(8, -1);
@@ -5393,7 +5417,6 @@ var Application = React.createClass({displayName: 'Application',
         this.setState({ready: true}, callback);
     },
     showHome: function(name){
-        console.log("showHome")
         this.setState({component: 'Home', item: null, items: null});
     },
     showOne: function(category, name){
@@ -5422,6 +5445,9 @@ var Application = React.createClass({displayName: 'Application',
             item: null
         });
     },
+    showDownload: function(){
+        this.setState({component: "Download"});
+    },
     assert: function(x){
         var type = getType(x);
         console.log(type, x);   
@@ -5440,9 +5466,6 @@ var Application = React.createClass({displayName: 'Application',
     show404: function(){
         this.setState({component: '404'});
     },
-    addToBundle: function(){
-
-    },
     render: function() {
         var self = this;
         var getCurrentComponent = function(){
@@ -5459,22 +5482,33 @@ var Application = React.createClass({displayName: 'Application',
             else if (self.state.component === "Categories") {
                 return (Categories( {items:self.state.items} ))
             }
+            else if (self.state.component === "Download") {
+                return (Download( {items:this.refs.bundle.state.items} ))
+            }
             else {
                 return (React.DOM.h1(null, "Page could not be found.  Try one of the menu items above."))
             }
         };
+
+        var download = function(){
+            return (Download(null ));
+        }
+
+        var body = function(){
+            return [React.DOM.div( {className:"small-9 columns"}, 
+                this.state.ready ? getCurrentComponent() : React.DOM.h3(null, "Loading...")
+            ),
+            React.DOM.div( {className:"small-3 columns"}, 
+                Bundle( {item:self.state.component === "Item" ? this.state.item : null} )
+            )]
+        }.bind(this);
 
         return (
             React.DOM.div(null, 
                 React.DOM.h2(null, "JS Nibbles"),
                 Nav(null ),
                 React.DOM.div( {className:"row"}, 
-                    React.DOM.div( {className:"small-9 columns"}, 
-                        this.state.ready ? getCurrentComponent() : React.DOM.h3(null, "Loading...")
-                    ),
-                    React.DOM.div( {className:"small-3 columns"}, 
-                        Bundle( {item:self.state.component === "Item" ? this.state.item : null} )
-                    )
+                    this.state.component === "Download" ? download() : body()
                 )
             )
         );
@@ -5483,7 +5517,7 @@ var Application = React.createClass({displayName: 'Application',
 
 module.exports = Application;
 
-},{"./bundle/bundle.jsx":47,"./categories.jsx":49,"./home.jsx":50,"./item.jsx":51,"./listing.jsx":52,"./nav.jsx":53,"api":"Fu5ZXU"}],47:[function(require,module,exports){
+},{"./bundle/bundle.jsx":48,"./bundle/bundleStore":49,"./categories.jsx":50,"./download.jsx":51,"./home.jsx":52,"./item.jsx":53,"./listing.jsx":54,"./nav.jsx":55,"api":"zLP7L+"}],48:[function(require,module,exports){
 /** @jsx React.DOM */
 
 var bundleStore = require("./bundleStore");
@@ -5491,6 +5525,9 @@ var bundleStore = require("./bundleStore");
 var Bundle = React.createClass({displayName: 'Bundle',
     getInitialState: function() {
         return {items: bundleStore.get()};
+    },
+    componentDidMount: function(){
+        this.change();
     },
     toggleItem: function(item){
     	var items = this.state.items;
@@ -5511,38 +5548,16 @@ var Bundle = React.createClass({displayName: 'Bundle',
 
     	bundleStore.set(items);
 
-        this.clearPreviousURL();
-    	this.setState({items: items});
+    	this.setState({items: items}, this.change);
+    },
+    change: function(){
+        this.props.onChange && this.props.onChange(this.state.items);
     },
     toggleCurrentItem: function(){
         this.toggleItem(this.props.item);
     },
     download: function(){
-        var js = bundleStore.getJS(this.state.items);
-
-        // unsafe nasty stuff
-        var blob = new Blob([js], {
-            type: "application/javascript" 
-        });
-
-        var a = document.createElement("a");
-        a.download = "nib.js";
-        
-        var createURL = URL.createObjectURL || URL.webkitCreateObjectURL;
-
-        var url = createURL(blob);
-        a.href = url;
-        a.click();
-
-        this.setState({_objectURL: url});
-    },
-    clearPreviousURL: function(){
-        var revokeURL = URL.revokeObjectURL || URL.webkitRevokeObjectURL;
-        var url = this.state._objectURL;
-        if (url) {
-            revokeURL(url);
-            this.setState({_objectURL: null});
-        }
+        window.location = "#/download";
     },
     render: function() {
         var bundle = this, items = this.state.items;
@@ -5567,7 +5582,7 @@ var Bundle = React.createClass({displayName: 'Bundle',
                 	)
                     
                 ),
-                this.props.item && (React.DOM.button( {onClick:this.toggleCurrentItem}, "Add/Remove Current Item")),
+                this.props.item && (React.DOM.button( {onClick:this.toggleCurrentItem}, "Add Current Item")),
                 items && items.length && (React.DOM.button( {onClick:this.download}, "Download JS"))
             )
         );
@@ -5579,7 +5594,7 @@ var Bundle = React.createClass({displayName: 'Bundle',
 module.exports = Bundle;
 
 
-},{"./bundleStore":48}],48:[function(require,module,exports){
+},{"./bundleStore":49}],49:[function(require,module,exports){
 var key = "nib_bundleStore_1";
 var api = require("api");
 
@@ -5623,7 +5638,7 @@ module.exports = {
 	}
 };
 
-},{"api":"Fu5ZXU"}],49:[function(require,module,exports){
+},{"api":"zLP7L+"}],50:[function(require,module,exports){
 /** @jsx React.DOM */
 
 var Categories = React.createClass({displayName: 'Categories',
@@ -5665,7 +5680,70 @@ var Categories = React.createClass({displayName: 'Categories',
 module.exports = Categories;
 
 
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
+/** @jsx React.DOM */
+
+var bundleStore = require("./bundle/bundleStore");
+var Bundle = require("./bundle/bundle.jsx");
+var JavaScriptPre = require("../common/javascript.jsx");
+var DownloadLink = require("../common/download-link.jsx");
+
+var Download = React.createClass({displayName: 'Download',
+    getInitialState: function() {
+        return {code: ""};
+    },
+    getHref: function(){
+        // unsafe nasty stuff
+        var blob = new Blob([this.state.code], {
+            type: "application/javascript" 
+        });
+        
+        var createURL = URL.createObjectURL || URL.webkitCreateObjectURL;
+
+        var url = createURL(blob);
+
+        this.clearPreviousURL = function(){
+            var revokeURL = URL.revokeObjectURL || URL.webkitRevokeObjectURL;
+            if (url) {
+                revokeURL(url);
+            }
+            url = null;
+        };
+
+        return url;
+    },
+    clearPreviousURL: function(){},
+    componentWillUnmount: function(){
+        this.clearPreviousURL();
+        this.setState({_objectURL: null})
+    },
+    update: function(items){
+        this.setState({
+            code: bundleStore.getJS(items)
+        });
+    },
+    render: function() {
+        return (
+
+            React.DOM.div(null, 
+                React.DOM.div( {className:"small-9 columns"}, 
+                    DownloadLink( {href:this.getHref(this.state.code), 
+                        className:"fluid button",
+                        download:"nib.js"}, "Save Bundle to File"),
+                    JavaScriptPre( {code:this.state.code, className:"js-pre"} )
+                ),
+                React.DOM.div( {className:"small-3 columns"}, 
+                    Bundle( {onChange:this.update} )
+                )
+            )
+        );
+    }
+});
+
+module.exports = Download;
+
+
+},{"../common/download-link.jsx":44,"../common/javascript.jsx":45,"./bundle/bundle.jsx":48,"./bundle/bundleStore":49}],52:[function(require,module,exports){
 /** @jsx React.DOM */
 
 var Home = React.createClass({displayName: 'Home',
@@ -5713,7 +5791,7 @@ var Home = React.createClass({displayName: 'Home',
 module.exports = Home;
 
 
-},{}],51:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 /** @jsx React.DOM */
 var JavaScriptPre = require("../common/javascript.jsx");
 
@@ -5747,7 +5825,7 @@ var Item = React.createClass({displayName: 'Item',
 module.exports = Item;
 
 
-},{"../common/javascript.jsx":44}],52:[function(require,module,exports){
+},{"../common/javascript.jsx":45}],54:[function(require,module,exports){
 /** @jsx React.DOM */
 var Listing = React.createClass({displayName: 'Listing',
     getInitialState: function() {
@@ -5803,7 +5881,7 @@ var Listing = React.createClass({displayName: 'Listing',
 module.exports = Listing;
 
 
-},{}],53:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 /** @jsx React.DOM */
 var Nav = React.createClass({displayName: 'Nav',
     getInitialState: function() {
@@ -5847,4 +5925,4 @@ var Nav = React.createClass({displayName: 'Nav',
 module.exports = Nav;
 
 
-},{}]},{},[45])
+},{}]},{},[46])
