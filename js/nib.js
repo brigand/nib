@@ -5715,7 +5715,6 @@ var Download = React.createClass({displayName: 'Download',
     clearPreviousURL: function(){},
     componentWillUnmount: function(){
         this.clearPreviousURL();
-        this.setState({_objectURL: null})
     },
     update: function(items){
         this.setState({
