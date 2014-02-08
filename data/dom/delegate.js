@@ -1,10 +1,9 @@
 // super fast event delegation
 // EventName, Selector, HandlerFunction[, Scope] -> Undefined
-function delegate(eventName, sel, callback, scope) {
-    var mappings = (delegate.mappings = delegate.mappings || {});
-
+function delegate(eventName, selector, callback, scope) {
+    var mappings = delegate.mappings;
     if (!mappings[eventName]) {
-        document.addEventListener(eventName, handle, false);
+        document.addEventListener(eventName, delegate.handle, false);
         mappings[eventName] = [];
     }
 
@@ -12,51 +11,51 @@ function delegate(eventName, sel, callback, scope) {
 
     list.push({
         eventName: eventName,
-        sel: sel,
+        selector: selector,
         callback: callback,
         scope: scope || document
     });
-
-    // this code only needs to run the first time delegate is called
-    if (delegate._inited) {
-        return;
-    }
-    delegate._inited = true;
+}
+delegate.mappings = {};
+delegate.handle = function handle(event) {
+    var name = event.type;
+    var root = document.body.parentNode;
+    var list = delegate.mappings[name];
+    
     
     var body = document.body;
-    var matches = 
-           body.matches 
-        || body.matchesSelector
-        || body.webkitMatchesSelector
-        || body.mozMatchesSelector
+    var matches = body.matches 
+        || body.matchesSelector 
+        || body.webkitMatchesSelector 
+        || body.mozMatchesSelector 
         || body.msMatchesSelector;
 
-    function handle(event) {
-        var name = event.type;
-        var root = document.body.parentNode;
-        var list = delegate.mappings[name];
+    for (var i = 0; i < list.length; i++) {
+        var options = list[i];
+        var target = event.target;
+        var selector = options.selector;
+        var callback = options.callback;
 
-        for (var i = 0; i < list.length; i++) {
-            var conf = list[i];
-            var target = event.target;
-            var sel = conf.sel;
-            var callback = conf.callback;
-
-            if (conf.eventName === name) {
-                while (target !== root) {
-                    if (matches.call(target, sel)) {
-                        return callback.apply(target, arguments);
-                    }
-
-                    target = target.parentNode;
+        if (options.eventName === name) {
+            while (target !== root) {
+                if (matches.call(target, selector)) {
+                    return callback.apply(target, arguments);
                 }
+
+                target = target.parentNode;
             }
         }
     }
-}
+};
+
 
 // When we click on a <p> element; highlight it
 delegate("click", "p", function (e) {
     this.style.backgroundColor = "yellow";
 });
 
+// bind all links to our router
+delegate("click", "[href]", function (e) {
+    e.preventDefault();
+    router.navigate(this.href);
+});
