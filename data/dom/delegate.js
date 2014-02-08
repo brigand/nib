@@ -1,16 +1,27 @@
 // super fast event delegation
-// EventName, Scope, Selector, HandlerFunction -> Undefined
-delegate("click", "#a", "#b", function (e) {
-    console.log(e.target.id);
-});
+// EventName, Selector, HandlerFunction[, Scope] -> Undefined
+function delegate(eventName, sel, callback, scope) {
+    var mappings = (delegate.mappings = delegate.mappings || {});
 
-function delegate(eventName, scope, sel, callback) {
-    var list = (delegate.list = delegate.list || []);
+    if (!mappings[eventName]) {
+        document.addEventListener(eventName, handle, false);
+        mappings[eventName] = [];
+    }
+
+    var list = mappings[eventName];
+
+    list.push({
+        eventName: eventName,
+        sel: sel,
+        callback: callback,
+        scope: scope || document
+    });
 
     // this code only needs to run the first time delegate is called
-    if (delegate.callback) {
+    if (delegate._inited) {
         return;
     }
+    delegate._inited = true;
     
     var body = document.body;
     var matches = 
@@ -20,14 +31,32 @@ function delegate(eventName, scope, sel, callback) {
         || body.mozMatchesSelector
         || body.msMatchesSelector;
 
-    delegate.callback = function (event) {
-        var name = event.name;
-        for (var i = 0; i < delegate.list.length; i++) {
-            var conf = delegate.list[i];
+    function handle(event) {
+        var name = event.type;
+        var root = document.body.parentNode;
+        var list = delegate.mappings[name];
 
-            if (conf.name === name) {
+        for (var i = 0; i < list.length; i++) {
+            var conf = list[i];
+            var target = event.target;
+            var sel = conf.sel;
+            var callback = conf.callback;
 
+            if (conf.eventName === name) {
+                while (target !== root) {
+                    if (matches.call(target, sel)) {
+                        return callback.apply(target, arguments);
+                    }
+
+                    target = target.parentNode;
+                }
             }
         }
     }
 }
+
+// When we click on a <p> element; highlight it
+delegate("click", "p", function (e) {
+    this.style.backgroundColor = "yellow";
+});
+
