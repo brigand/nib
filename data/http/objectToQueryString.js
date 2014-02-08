@@ -29,6 +29,7 @@ function objectToQueryString(obj){
     }).join("&");
 }
 
+
 // ask your server for cars of a specific description
 var url = "/cars?" + objectToQueryString({type: "fast", color: "red"});
 doAjaxyStuff(url);

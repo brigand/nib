@@ -56,7 +56,7 @@ module.exports = function () {
                 return readFile(path).then(function (contents) {
                     return String(contents).split("\n");
 
-                    // description and type definition
+                // description and type definition
                 }).then(function (lines) {
                         var leadingComments = [];
                         for ( var i = 0; i < lines.length; i++ ) {
@@ -74,26 +74,34 @@ module.exports = function () {
                         props.types = leadingComments.slice(-1)[0];
 
                         return lines.slice(i);
-                        // the actual function
+                    // the actual function
                     }).then(function (lines) {
 
                         var functionLines = [];
+                        var closed = false;
+                        var emptyAfterClose = 0;
 
-                        for ( var i = 0; i < lines.length; i++ ) {
+                        for ( var i = 0; i < lines.length && emptyAfterClose < 2; i++ ) {
                             var line = lines[i];
                             functionLines.push(line);
 
                             if ( startsWith(line, "}") ) {
-                                break;
+                                closed = true;
+                            }
+                            if (closed) {
+                                if (line.trim()) {
+                                    emptyAfterClose = 0;
+                                }
+                                else {
+                                    emptyAfterClose++;
+                                }
                             }
                         }
 
-                        props.function = functionLines.join("\n");
+                        props.function = functionLines.join("\n").trim();
 
                         // eat empty lines
-                        for ( i = i + 1; i < lines.length && lines[i].trim() === ""; i++ ) {
-                            ;
-                        }
+                        for ( i = i + 1; i < lines.length && lines[i].trim() === ""; i++ );
 
                         return lines.slice(i);
 

@@ -38,6 +38,7 @@ function objectFromQueryString(string){
     return obj;
 }
 
+
 // ask your server for cars of a specific description
 var query = "?type=fast&color=red";
 objectFromQueryString(query);

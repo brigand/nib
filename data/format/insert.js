@@ -20,6 +20,7 @@ function insert(template, mapping) {
     });
 }
 
+
 // represent a name object as a string
 var name = {
     first: "John",

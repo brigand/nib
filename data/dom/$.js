@@ -6,6 +6,7 @@ function $(sel, parent) {
     return slice.call(nodeList);
 }
 
+
 // Get the text from all <p> tags on a page
 var allText = $("p").map(function(el){
     return el.textContent;

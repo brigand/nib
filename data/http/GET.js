@@ -20,6 +20,7 @@ function GET(url, successCallback, errorCallback) {
     xhr.send();
 }
 
+
 // Get a text file and log it to the console
 GET("foo.txt", function(text){
     console.log(text);

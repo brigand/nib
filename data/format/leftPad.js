@@ -11,6 +11,7 @@ function leftPad(str, count, s){
 	return str;
 }
 
+
 // format a number of minutes
 leftPad(7) // => "07"
 
