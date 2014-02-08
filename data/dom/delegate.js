@@ -20,8 +20,7 @@ delegate.mappings = {};
 delegate.handle = function handle(event) {
     var name = event.type;
     var root = document.body.parentNode;
-    var list = delegate.mappings[name];
-    
+    var relevantHandlers = delegate.mappings[name];
     
     var body = document.body;
     var matches = body.matches 
@@ -30,13 +29,13 @@ delegate.handle = function handle(event) {
         || body.mozMatchesSelector 
         || body.msMatchesSelector;
 
-    for (var i = 0; i < list.length; i++) {
-        var options = list[i];
+    for (var i = 0; i < relevantHandlers.length; i++) {
+        var handlerConfig = relevantHandlers[i];
         var target = event.target;
-        var selector = options.selector;
-        var callback = options.callback;
+        var selector = handlerConfig.selector;
+        var callback = handlerConfig.callback;
 
-        if (options.eventName === name) {
+        if (handlerConfig.eventName === name) {
             while (target !== root) {
                 if (matches.call(target, selector)) {
                     return callback.apply(target, arguments);
