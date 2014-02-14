@@ -5583,7 +5583,7 @@ var Bundle = React.createClass({displayName: 'Bundle',
                     
                 ),
                 this.props.item && (React.DOM.button( {onClick:this.toggleCurrentItem}, "Add Current Item")),
-                items && items.length && (React.DOM.button( {onClick:this.download}, "Download JS"))
+                items && items.length && (React.DOM.button( {onClick:this.download}, "Download JS")) || false
             )
         );
     }

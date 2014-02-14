@@ -47,6 +47,11 @@
 	text-align: center;
 }
 
+.nib-bundle ~ button {
+	display: block;
+	width: 100%;
+}
+
 /* Colors for the code highlighting */
 .js-fn, .js-keyword, .js-number, .js-comment, .js-op {
 	font-weight: bold;
