@@ -63,7 +63,7 @@ var Bundle = React.createClass({
                     
                 </div>
                 {this.props.item && (<button onClick={this.toggleCurrentItem}>Add Current Item</button>)}
-                {items && items.length && (<button onClick={this.download}>Download JS</button>)}
+                {items && items.length && (<button onClick={this.download}>Download JS</button>) || false}
             </div>
         );
     }
